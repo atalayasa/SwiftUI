@@ -45,7 +45,11 @@ struct Checkout: View {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
             }
-            Section(header: Text(totalPrice).font(.largeTitle)) {
+
+            HowToPay()
+
+            Section(header: Text(totalPrice)
+                .font(.largeTitle)) {
                 Button("Confirm order") {
                     self.showingPaymentAlert.toggle()
                 }
@@ -53,7 +57,23 @@ struct Checkout: View {
         }
         .navigationBarTitle(Text("Payment"), displayMode: .inline)
         .alert(isPresented: $showingPaymentAlert) {
-            Alert(title: Text("Order confirmed"), message: Text("Your \(totalPrice) - thank you"), dismissButton: .default(Text("OK")))
+            Alert(title: Text("Order confirmed"),
+                  message: Text("Your \(totalPrice) - thank you"),
+                  dismissButton: .default(Text("OK")))
+        }
+    }
+}
+
+struct HowToPay: View {
+    static let pickupTimes = ["Now", "Tonight", "Tomorrow"]
+    @State private var pickupTime = 0
+    var body: some View {
+        Section(header: Text("Pickup Time")) {
+            Picker("Pickup:", selection: $pickupTime) {
+                ForEach(0 ..< Self.pickupTimes.count) {
+                    Text("\(Self.pickupTimes[$0])")
+                }
+            }.pickerStyle(SegmentedPickerStyle())
         }
     }
 }
